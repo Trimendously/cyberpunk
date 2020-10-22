@@ -1,62 +1,31 @@
-#Update to python 3 lol
-
-# Will fetch the html files
-import requests
-
-# Pulls data from html files
-from bs4 import BeautifulSoup
-
-import urllib.request
-
-import random
-
-
-def userInput():
-    InvalidInput = True
-    print("The rarities are as follows: poor, common, rare, excellent")
-    formatted_rarity = 'Empty'
-    while (InvalidInput):
-        rarity = input("Enter the rarity you desire: ")
-        formatted_rarity = rarity[:1].upper() + rarity[1:].lower()
-        options = ["Poor","Common","Rare","Excellent"]
-
-        for x in range(0,4):
-            if (options[x] == formatted_rarity):
-                InvalidInput = False
-                break
-hn
-    return str(formatted_rarity)
-
-
-def weapon_parser():
-
-    # A comprehensive webpage containing ample amount of cyber punk weapon info
-    url = "https://cyberpunk.fandom.com/wiki/Weapons_in_Cyberpunk_2020"
-
-    request = urllib.request.Request(url)
-    response = urllib.request.urlopen(request)
-
-    soup = BeautifulSoup((response.read()), "lxml")
-    table = soup.findAll('table') #All tales on this website
-
-    rare = userInput()
-
-
-    placeholder = True
-    while(placeholder):
-        random_weapon = random.randint(0,len(table))
-        if (len(table) > random_weapon): #Defensive coding
-            for row in table[random_weapon].findAll('tr'):
-                rarity = row.findAll('td')
-
-                if (len(rarity)>4): #Defensive coding
-                    if ((rarity[4].get_text(strip=True)) == rare): #Strips to get rid of whitespace
-                        placeholder = False
-                        print(row.find('td').get_text(strip =True))
-                        break
-
+from character_creation import*
+from weapons import*
 
 def main():
-    weapon_parser()
+    # Creating an interface for my Cyberpunk program
+    characters = []
+    print('Hello welcome to the Cyberpunk 2020 RPG Character creator.')
+    print('This character creator is designed to be used to quickly create background/ combatant characters, who don\'t need immediate background info.')
+    character_count = int(input('Please enter how many characters that you would like to create today:  '))
+    characters = [character_count]
+    for x in range(0,character_count):
+        print('\nCreation for character ', (x+1))
+        type = input('Enter whether the character is a \'armed\' or \'unarmed\'\n')
+        if (type == 'armed'):
+            #characters[x] = physical_description(names.get_full_name(gender=gender()), gender(), ancestry(), age())
+            characters[x] = physical_description('Blank', gender(), ancestry(), age()) # Temporarily blank name
+            print(characters[x].name)
+            stats()
+            weapon_parser()
+            #situation() # Need to fix this first
+        elif (type == 'unarmed'):
+            #characters[x] = physical_description(names.get_full_name(gender=gender()), gender(), ancestry(), age())
+            characters[x] = physical_description('Blank', gender(), ancestry(), age()) # Temporarily blank name
+            print(characters[x].name)
+            stats()
+        else:
+            print('Please enter the type of character properly with no gramatical mistakes.')
+            x = x-1 # Keeps the code at the same point in the loop
+    print('Thank you for using this Cyberpunk program. It is still a work in progress so any suggestions are more than welcome.')
 
 main()
