@@ -1,6 +1,8 @@
 # File to create actual character
 # Will fetch the html files
 import requests
+#import PyPDF2
+
 #import names #Having trouble getting a library so may make my own or webscrape
 # Pulls data from html files
 from bs4 import BeautifulSoup
@@ -10,8 +12,9 @@ import random
 
 import array as ar
 
-def randomizer(x):
-    return random.randint(0, x)
+def randomizer(a,b): #Just trying to make code more conscise
+    return random.randint(a, b)
+
 class physical_description:
     #Will eventually balance so that either I or you the user can decide the proportion of each category
     def __init__(person, name, ancestry, gender, age):
@@ -19,15 +22,24 @@ class physical_description:
         person.ancestry = ancestry
         person.gender = gender
         person.age = age
-    #def funny_quirk():
-        #Random selects one from text file(to be made)
-        # Include some phobias but not too dark
-    def introduction():
-        print(person.name + " is a " + person.age + " year old "+ gender() + "born in " + person.ancestry +".")
+    def introduction(person):
+        print(person.name , " is a " , person.age , " year old " , person.ancestry, person.gender ,".")
 
+def name(gender):
+    if (gender == 'male'):
+        file = open('boy_names.txt')
+    elif(gender == 'female'):
+        file = open('girl_names.txt')
+    else:
+        print("Error")
+        return
+    random_name = randomizer(0,999)
+    lines = file.readlines()
+
+    return lines[random_name].rstrip("\n")
 
 def gender():
-    gender = randomizer(2)
+    gender = randomizer(0,2)
     if (gender == 0):
         return 'male'
     elif (gender == 1):
@@ -35,15 +47,12 @@ def gender():
 
 def ancestry():
     ancestry_file = open("ancestry.txt")
-    content = ancestry_file.read()
-    lineList = content.split("\n")
-    random_ancestry = random.randint(0,len(lineList))
+    lines = ancestry_file.readlines()
+    random_ancestry = randomizer(0,len(lines))
 
-    for position, line in enumerate(ancestry_file):
-        if postion in random_ancestry:
-            return line
-
-
+    return lines[random_ancestry].rstrip("\n")
+"""
+#Need to edit this still
 def roles():
     supported_roles = ["Rockerboy", "Solo", "Netrunner", "Techie", "Media", "Cop", "Corporate", "Fixer", "Nomad"]
     url = "https://rpg.web-mage.ca/pages/roles.php"
@@ -53,8 +62,10 @@ def roles():
 
     soup = BeautifulSoup((response.read()), "lxml")
     table = soup.findAll('table') #All tables on this website
+"""
 def age():
-    return random.randint(18,50)
+    return randomizer(18,50)
+
 def quality(sum,type):
     if (sum >= 9):
         if (type != 'inhuman'):
@@ -76,7 +87,7 @@ def stats():
     type = input('Enter the type of person you desire from the following: inhuman, trained, average, or subpar.\n')
     x = 0
     while (x < 9):
-        skills[x] = random.randint(3,10)
+        skills[x] = randomizer(0,10)
         x = x +1
         if (x == 9):
             sum = 0
