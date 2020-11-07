@@ -13,7 +13,8 @@ Norwegian
 Dutch
 Swedish
 Chinese
-Asian Indian
+Asian
+Indian
 Scotch-Irish
 Russian
 West Indian
